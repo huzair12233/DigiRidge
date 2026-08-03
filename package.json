@@ -1,0 +1,9 @@
+{
+  "name": "digiridge-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DigiRidge marketing website with a serverless contact form handler.",
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}
