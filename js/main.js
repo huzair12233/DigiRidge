@@ -98,6 +98,40 @@
     });
 
 
+    // Quote request form submission
+    $('#quoteForm').on('submit', function (e) {
+        e.preventDefault();
+        var $form = $(this);
+        var $btn = $form.find('button[type="submit"]');
+        var $status = $form.find('.quote-form-status');
+        var originalText = $btn.text();
+        var data = {
+            name: $form.find('[name="name"]').val().trim(),
+            email: $form.find('[name="email"]').val().trim(),
+            service: $form.find('[name="service"]').val(),
+            message: $form.find('[name="message"]').val().trim()
+        };
+
+        $btn.prop('disabled', true).text('Sending...');
+        $status.attr('class', 'quote-form-status mb-0').text('');
+
+        $.ajax({
+            url: '/api/contact',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data)
+        }).done(function () {
+            $status.attr('class', 'quote-form-status mb-0 text-white fw-bold').text('Thanks! Your request has been sent.');
+            $form[0].reset();
+        }).fail(function (xhr) {
+            var msg = (xhr.responseJSON && xhr.responseJSON.error) || 'Something went wrong. Please try again.';
+            $status.attr('class', 'quote-form-status mb-0 text-warning fw-bold').text(msg);
+        }).always(function () {
+            $btn.prop('disabled', false).text(originalText);
+        });
+    });
+
+
     // Vendor carousel
     $('.vendor-carousel').owlCarousel({
         loop: true,

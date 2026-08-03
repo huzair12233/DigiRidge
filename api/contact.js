@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, subject, message } = req.body || {};
+  const { name, email, subject, service, message } = req.body || {};
 
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Name, email and message are required.' });
@@ -23,6 +23,23 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: 'Email is not configured on the server yet.' });
   }
 
+  const emailSubject = service
+    ? `New quote request: ${service}`
+    : `New contact form message: ${subject || 'No subject'}`;
+
+  const textLines = [`Name: ${name}`, `Email: ${email}`];
+  if (service) textLines.push(`Requested Service: ${service}`);
+  if (subject) textLines.push(`Subject: ${subject}`);
+  textLines.push('', 'Message:', message);
+
+  const htmlParts = [
+    `<p><strong>Name:</strong> ${name}</p>`,
+    `<p><strong>Email:</strong> ${email}</p>`,
+  ];
+  if (service) htmlParts.push(`<p><strong>Requested Service:</strong> ${service}</p>`);
+  if (subject) htmlParts.push(`<p><strong>Subject:</strong> ${subject}</p>`);
+  htmlParts.push(`<p><strong>Message:</strong><br>${String(message).replace(/\n/g, '<br>')}</p>`);
+
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -33,12 +50,9 @@ module.exports = async (req, res) => {
       from: `"DigiRidge Website" <${GMAIL_USER}>`,
       to: GMAIL_USER,
       replyTo: email,
-      subject: `New contact form message: ${subject || 'No subject'}`,
-      text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject || '-'}\n\nMessage:\n${message}`,
-      html: `<p><strong>Name:</strong> ${name}</p>` +
-            `<p><strong>Email:</strong> ${email}</p>` +
-            `<p><strong>Subject:</strong> ${subject || '-'}</p>` +
-            `<p><strong>Message:</strong><br>${String(message).replace(/\n/g, '<br>')}</p>`,
+      subject: emailSubject,
+      text: textLines.join('\n'),
+      html: htmlParts.join(''),
     });
 
     return res.status(200).json({ success: true });
