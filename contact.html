@@ -144,7 +144,10 @@
                             <div class="col-md-6">
                                 <input type="email" name="email" required class="form-control border-0 bg-light px-4" placeholder="Your Email" style="height: 55px;">
                             </div>
-                            <div class="col-12">
+                            <div class="col-md-6">
+                                <input type="tel" name="phone" required class="form-control border-0 bg-light px-4" placeholder="Your Mobile Number" style="height: 55px;">
+                            </div>
+                            <div class="col-md-6">
                                 <input type="text" name="subject" class="form-control border-0 bg-light px-4" placeholder="Subject" style="height: 55px;">
                             </div>
                             <div class="col-12">
@@ -178,6 +181,7 @@
                 var data = {
                     name: form.name.value.trim(),
                     email: form.email.value.trim(),
+                    phone: form.phone.value.trim(),
                     subject: form.subject.value.trim(),
                     message: form.message.value.trim()
                 };

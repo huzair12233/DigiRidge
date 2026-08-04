@@ -108,7 +108,8 @@
         var data = {
             name: $form.find('[name="name"]').val().trim(),
             email: $form.find('[name="email"]').val().trim(),
-            service: $form.find('[name="service"]').val(),
+            phone: $form.find('[name="phone"]').val().trim(),
+            service: $form.find('[name="service"]').val() || 'Not specified',
             message: $form.find('[name="message"]').val().trim()
         };
 
@@ -116,7 +117,7 @@
         $status.attr('class', 'quote-form-status mb-0').text('');
 
         $.ajax({
-            url: '/api/contact',
+            url: $form.attr('action'),
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data)

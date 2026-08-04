@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^[+]?[\d\s()-]{7,20}$/;
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -8,13 +9,16 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, email, subject, service, message } = req.body || {};
+  const { name, email, phone, subject, service, message } = req.body || {};
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Name, email and message are required.' });
+  if (!name || !email || !phone || !message) {
+    return res.status(400).json({ error: 'Name, email, mobile number and message are required.' });
   }
   if (!EMAIL_RE.test(email)) {
     return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+  if (!PHONE_RE.test(phone)) {
+    return res.status(400).json({ error: 'Please enter a valid mobile number.' });
   }
 
   const { GMAIL_USER, GMAIL_APP_PASSWORD } = process.env;
@@ -27,7 +31,7 @@ module.exports = async (req, res) => {
     ? `New quote request: ${service}`
     : `New contact form message: ${subject || 'No subject'}`;
 
-  const textLines = [`Name: ${name}`, `Email: ${email}`];
+  const textLines = [`Name: ${name}`, `Email: ${email}`, `Phone: ${phone}`];
   if (service) textLines.push(`Requested Service: ${service}`);
   if (subject) textLines.push(`Subject: ${subject}`);
   textLines.push('', 'Message:', message);
@@ -35,6 +39,7 @@ module.exports = async (req, res) => {
   const htmlParts = [
     `<p><strong>Name:</strong> ${name}</p>`,
     `<p><strong>Email:</strong> ${email}</p>`,
+    `<p><strong>Phone:</strong> ${phone}</p>`,
   ];
   if (service) htmlParts.push(`<p><strong>Requested Service:</strong> ${service}</p>`);
   if (subject) htmlParts.push(`<p><strong>Subject:</strong> ${subject}</p>`);
