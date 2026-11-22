@@ -114,7 +114,7 @@
         };
 
         $btn.prop('disabled', true).text('Sending...');
-        $status.attr('class', 'quote-form-status mb-0').text('');
+        $status.attr('class', 'quote-form-status form-status mb-0').html('');
 
         $.ajax({
             url: $form.attr('action'),
@@ -122,11 +122,13 @@
             contentType: 'application/json',
             data: JSON.stringify(data)
         }).done(function () {
-            $status.attr('class', 'quote-form-status mb-0 text-white fw-bold').text('Thanks! Your request has been sent.');
+            $status.attr('class', 'quote-form-status form-status mb-0 is-success')
+                .html('<i class="bi bi-check-circle-fill"></i><span>Thanks! Your request has been sent.</span>');
             $form[0].reset();
         }).fail(function (xhr) {
             var msg = (xhr.responseJSON && xhr.responseJSON.error) || 'Something went wrong. Please try again.';
-            $status.attr('class', 'quote-form-status mb-0 text-warning fw-bold').text(msg);
+            $status.attr('class', 'quote-form-status form-status mb-0 is-error')
+                .html('<i class="bi bi-exclamation-triangle-fill"></i><span>' + msg + '</span>');
         }).always(function () {
             $btn.prop('disabled', false).text(originalText);
         });

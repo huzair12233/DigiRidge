@@ -92,9 +92,9 @@
             <div class="row py-5">
                 <div class="col-12 pt-lg-5 mt-lg-5 text-center">
                     <h1 class="display-4 text-white animated zoomIn">Free Quote</h1>
-                    <a href="" class="h5 text-white">Home</a>
+                    <a href="index.html" class="h5 text-white">Home</a>
                     <i class="far fa-circle text-white px-2"></i>
-                    <a href="" class="h5 text-white">Free Quote</a>
+                    <span class="h5 text-white">Free Quote</span>
                 </div>
             </div>
         </div>
@@ -121,8 +121,8 @@
                     </div>
                     <p class="mb-4">Tell us about your web, enterprise, or AI automation project and we'll get back with a clear scope, timeline and estimate &mdash; backed by the same delivery discipline we bring to every engagement.</p>
                     <div class="d-flex align-items-center mt-2 wow zoomIn" data-wow-delay="0.6s">
-                        <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
-                            <i class="fa fa-phone-alt text-white"></i>
+                        <div class="icon-tile">
+                            <i class="fa fa-phone-alt"></i>
                         </div>
                         <div class="ps-4">
                             <h5 class="mb-2">Call to ask any question</h5>
@@ -131,37 +131,52 @@
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <div class="bg-primary rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
+                    <div class="quote-panel rounded h-100 d-flex align-items-center p-5 wow zoomIn" data-wow-delay="0.9s">
                         <form id="quoteForm" action="/api/contact" method="POST">
                             <div class="row g-3">
-                                <div class="col-xl-12">
-                                    <input type="text" name="name" required class="form-control bg-light border-0" placeholder="Your Name" style="height: 55px;">
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" name="name" id="quotePageName" required class="form-control bg-light border-0" placeholder="Your Name">
+                                        <label for="quotePageName">Your Name</label>
+                                    </div>
                                 </div>
                                 <div class="col-12">
-                                    <input type="email" name="email" required class="form-control bg-light border-0" placeholder="Your Email" style="height: 55px;">
+                                    <div class="form-floating">
+                                        <input type="email" name="email" id="quotePageEmail" required class="form-control bg-light border-0" placeholder="Your Email">
+                                        <label for="quotePageEmail">Your Email</label>
+                                    </div>
                                 </div>
                                 <div class="col-12">
-                                    <input type="tel" name="phone" required class="form-control bg-light border-0" placeholder="Your Mobile Number" style="height: 55px;">
+                                    <div class="form-floating">
+                                        <input type="tel" name="phone" id="quotePagePhone" required class="form-control bg-light border-0" placeholder="Your Mobile Number">
+                                        <label for="quotePagePhone">Your Mobile Number</label>
+                                    </div>
                                 </div>
                                 <div class="col-12">
-                                    <select name="service" class="form-select bg-light border-0" style="height: 55px;">
-                                        <option selected value="">Select A Service</option>
-                                        <option value="Custom Software Development">Custom Software Development</option>
-                                        <option value="Project, Program and Delivery Management">Project, Program and Delivery Management</option>
-                                        <option value="Enterprise Web Development">Enterprise Web Development</option>
-                                        <option value="AI & Agentic Automation">AI & Agentic Automation</option>
-                                        <option value="Data Analytics & Dashboards">Data Analytics & Dashboards</option>
-                                        <option value="API & System Integration">API & System Integration</option>
-                                    </select>
+                                    <div class="form-floating">
+                                        <select name="service" id="quotePageService" class="form-select bg-light border-0">
+                                            <option selected value="">Select A Service</option>
+                                            <option value="Custom Software Development">Custom Software Development</option>
+                                            <option value="Project, Program and Delivery Management">Project, Program and Delivery Management</option>
+                                            <option value="Enterprise Web Development">Enterprise Web Development</option>
+                                            <option value="AI & Agentic Automation">AI & Agentic Automation</option>
+                                            <option value="Data Analytics & Dashboards">Data Analytics & Dashboards</option>
+                                            <option value="API & System Integration">API & System Integration</option>
+                                        </select>
+                                        <label for="quotePageService">Select A Service</label>
+                                    </div>
                                 </div>
                                 <div class="col-12">
-                                    <textarea name="message" required class="form-control bg-light border-0" rows="3" placeholder="Message"></textarea>
+                                    <div class="form-floating">
+                                        <textarea name="message" id="quotePageMessage" required class="form-control bg-light border-0" placeholder="Message" style="height: 100px"></textarea>
+                                        <label for="quotePageMessage">Message</label>
+                                    </div>
                                 </div>
                                 <div class="col-12">
                                     <button class="btn btn-dark w-100 py-3" type="submit">Request A Quote</button>
                                 </div>
                                 <div class="col-12">
-                                    <div class="quote-form-status mb-0"></div>
+                                    <div class="quote-form-status form-status mb-0"></div>
                                 </div>
                             </div>
                         </form>
@@ -244,7 +259,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid text-white" style="background: #061429;">
+    <div class="container-fluid text-white" style="background: #0A1220;">
         <div class="container text-center">
             <div class="row justify-content-end">
                 <div class="col-lg-8 col-md-6">

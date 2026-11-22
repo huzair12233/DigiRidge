@@ -92,9 +92,9 @@
             <div class="row py-5">
                 <div class="col-12 pt-lg-5 mt-lg-5 text-center">
                     <h1 class="display-4 text-white animated zoomIn">Contact Us</h1>
-                    <a href="" class="h5 text-white">Home</a>
+                    <a href="index.html" class="h5 text-white">Home</a>
                     <i class="far fa-circle text-white px-2"></i>
-                    <a href="" class="h5 text-white">Contact</a>
+                    <span class="h5 text-white">Contact</span>
                 </div>
             </div>
         </div>
@@ -112,8 +112,8 @@
             <div class="row g-5 mb-5">
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center wow fadeIn" data-wow-delay="0.1s">
-                        <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
-                            <i class="fa fa-phone-alt text-white"></i>
+                        <div class="icon-tile">
+                            <i class="fa fa-phone-alt"></i>
                         </div>
                         <div class="ps-4">
                             <h5 class="mb-2">Call to ask any question</h5>
@@ -123,8 +123,8 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center wow fadeIn" data-wow-delay="0.4s">
-                        <div class="bg-primary d-flex align-items-center justify-content-center rounded" style="width: 60px; height: 60px;">
-                            <i class="fa fa-envelope-open text-white"></i>
+                        <div class="icon-tile">
+                            <i class="fa fa-envelope-open"></i>
                         </div>
                         <div class="ps-4">
                             <h5 class="mb-2">Email to get free quote</h5>
@@ -139,25 +139,40 @@
                     <form id="contactForm" action="/api/contact" method="POST">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <input type="text" name="name" required class="form-control border-0 bg-light px-4" placeholder="Your Name" style="height: 55px;">
+                                <div class="form-floating">
+                                    <input type="text" name="name" id="contactName" required class="form-control border-0 bg-light" placeholder="Your Name">
+                                    <label for="contactName">Your Name</label>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <input type="email" name="email" required class="form-control border-0 bg-light px-4" placeholder="Your Email" style="height: 55px;">
+                                <div class="form-floating">
+                                    <input type="email" name="email" id="contactEmail" required class="form-control border-0 bg-light" placeholder="Your Email">
+                                    <label for="contactEmail">Your Email</label>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <input type="tel" name="phone" required class="form-control border-0 bg-light px-4" placeholder="Your Mobile Number" style="height: 55px;">
+                                <div class="form-floating">
+                                    <input type="tel" name="phone" id="contactPhone" required class="form-control border-0 bg-light" placeholder="Your Mobile Number">
+                                    <label for="contactPhone">Your Mobile Number</label>
+                                </div>
                             </div>
                             <div class="col-md-6">
-                                <input type="text" name="subject" class="form-control border-0 bg-light px-4" placeholder="Subject" style="height: 55px;">
+                                <div class="form-floating">
+                                    <input type="text" name="subject" id="contactSubject" class="form-control border-0 bg-light" placeholder="Subject">
+                                    <label for="contactSubject">Subject</label>
+                                </div>
                             </div>
                             <div class="col-12">
-                                <textarea name="message" required class="form-control border-0 bg-light px-4 py-3" rows="4" placeholder="Message"></textarea>
+                                <div class="form-floating">
+                                    <textarea name="message" id="contactMessage" required class="form-control border-0 bg-light" placeholder="Message" style="height: 120px"></textarea>
+                                    <label for="contactMessage">Message</label>
+                                </div>
                             </div>
                             <div class="col-12">
                                 <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
                             </div>
                             <div class="col-12">
-                                <div id="contactFormStatus" class="mb-0"></div>
+                                <div id="contactFormStatus" class="form-status mb-0"></div>
                             </div>
                         </div>
                     </form>
@@ -175,6 +190,17 @@
             var status = document.getElementById('contactFormStatus');
             if (!form) return;
 
+            function setStatus(kind, message) {
+                if (!kind) {
+                    status.className = 'form-status mb-0';
+                    status.innerHTML = '';
+                    return;
+                }
+                var icon = kind === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
+                status.className = 'form-status mb-0 is-' + kind;
+                status.innerHTML = '<i class="bi ' + icon + '"></i><span>' + message + '</span>';
+            }
+
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 var submitBtn = form.querySelector('button[type="submit"]');
@@ -188,8 +214,7 @@
 
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Sending...';
-                status.className = 'mb-0';
-                status.textContent = '';
+                setStatus(null, '');
 
                 fetch(form.action, {
                     method: 'POST',
@@ -199,17 +224,14 @@
                     .then(function (res) { return res.json().then(function (body) { return { ok: res.ok, body: body }; }); })
                     .then(function (result) {
                         if (result.ok) {
-                            status.className = 'mb-0 text-success fw-bold';
-                            status.textContent = 'Thanks! Your message has been sent.';
+                            setStatus('success', 'Thanks! Your message has been sent.');
                             form.reset();
                         } else {
-                            status.className = 'mb-0 text-danger fw-bold';
-                            status.textContent = result.body && result.body.error ? result.body.error : 'Something went wrong. Please try again.';
+                            setStatus('error', result.body && result.body.error ? result.body.error : 'Something went wrong. Please try again.');
                         }
                     })
                     .catch(function () {
-                        status.className = 'mb-0 text-danger fw-bold';
-                        status.textContent = 'Something went wrong. Please try again.';
+                        setStatus('error', 'Something went wrong. Please try again.');
                     })
                     .finally(function () {
                         submitBtn.disabled = false;
@@ -291,7 +313,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid text-white" style="background: #061429;">
+    <div class="container-fluid text-white" style="background: #0A1220;">
         <div class="container text-center">
             <div class="row justify-content-end">
                 <div class="col-lg-8 col-md-6">
